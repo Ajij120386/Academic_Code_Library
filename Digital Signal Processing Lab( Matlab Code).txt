@@ -1,0 +1,442 @@
+
+  ///////////////if____Else
+
+     x=input('enter val1');
+y=input('enter val2');
+if x>y
+
+    disp('x boro');
+
+else
+     disp('y boro');
+
+end
+
+////single parameter function
+
+function avg=func(x)
+
+avg=sum(x)/numel(x);
+end
+
+
+function avg=func(x)
+
+avg=sum(x(:))/numel(x);
+end
+
+//multiple parameter func
+
+function[s av]= sumav(x)
+n=length(x);
+s=sum(x);
+av=s/n;
+end
+
+
+////////////////Circular Shift using time reversal
+
+x = [1 2 -2 3];
+N = length(x);
+
+
+y = zeros(1, N);
+
+
+for i = 0:N-1
+  z=N+i-1;
+  zz=mod(z,N);
+
+
+ y(i+1) = x(zz+1);
+end
+
+
+disp('Original Signal:');
+disp(x);
+disp('Circularly Shifted Signal:');
+disp(y);
+
+
+/////////////// Circular covolution using matrix
+% Define input sequences
+x = [1 2 3 1];
+h = [1 1 1];
+
+% Length of input and filter
+Lx = length(x);
+Lh = length(h);
+
+% Length of the result (circular convolution)
+N = max(Lx, Lh);
+
+% Pad sequences with zeros to match length
+x_pad = [x zeros(1, N-Lx)];
+h_pad = [h zeros(1, N-Lh)];
+
+% Construct the circular convolution matrix
+conv_matrix = zeros(N, N);
+for i = 1:N
+    conv_matrix(:, i) = circshift(h_pad', i-1)';
+end
+
+% Perform circular convolution via matrix multiplication
+Y = conv_matrix * x_pad';
+
+% Display result
+disp('Circular Convolution Result:');
+disp(Y);
+
+
+//////////////////////Circular Convolution Using DFT & IDFT
+clc;
+clear all;
+close all;
+% x =input('Enter Input');
+x=[1 2 3 1];
+h=[1 1 1 0];
+N1=length(x);
+
+N2=length(h);
+
+N=max(N1,N2);
+
+X=zeros(1,N1);
+H=zeros(1,N2);
+Z = zeros(1, N);
+for k=0:N-1
+    for n=0:N-1
+        X(k+1)=X(k+1)+(x(n+1)*exp((-j*2*pi*k*n)/N));
+        H(k+1)=H(k+1)+(h(n+1)*exp((-j*2*pi*k*n)/N));
+
+
+    end
+
+end
+
+for k = 1:N
+    Z(k) = X(k) * H(k);
+end
+
+y=zeros(1,N);
+
+for n=0:N-1
+    for k=0:N-1
+        y(n+1)=y(n+1)+(1/N)*(Z(k+1)*exp((j*2*pi*k*n)/N) );
+    end
+
+end
+
+
+disp('Circular Convolution Result:');
+%disp(ifft(Z));
+disp(y);
+
+
+//////////////////////Circular Convolution Using DFT & IDFT
+clc;
+clear all;
+close all;
+
+% Define input sequences
+x = [1, 2, 3, 1]; % Sequence 1
+h = [1, 1, 1, 0];    % Sequence 2
+
+% Length of circular convolution result
+N = length(x);
+
+% Compute DFT of input sequences
+X = fft(x, N);
+H = fft(h, N);
+
+% Multiply frequency-domain representations pointwise
+Y = X .* H;
+
+% Compute inverse DFT of the product
+y = ifft(Y);
+
+% Display the circular convolution result
+disp('Circular Convolution Result:');
+disp(y);
+
+
+//////////////Linear Convolution
+
+clc;
+clear all;
+close all;
+
+% Define input sequences
+x = [1, 2, 3, 1]; % Sequence 1
+h = [1, 1, 1];    % Sequence 2
+
+% Length of circular convolution result
+N = length(x) + length(h) - 1;
+
+% Compute DFT of input sequences
+X = fft(x, N);
+H = fft(h, N);
+
+% Multiply frequency-domain representations pointwise
+Y = X .* H;
+
+% Compute inverse DFT of the product
+y = ifft(Y);
+
+% Display the circular convolution result
+disp('Circular Convolution Result:');
+disp(y);
+
+//Linear Convolution Using Circular Convolution
+% Define input sequences
+x = [1 2 3 1];
+h = [1 1 1];
+
+% Length of input and filter
+Lx = length(x);
+Lh = length(h);
+
+% Length of the result (circular convolution)
+N = Lx+Lh-1;
+
+% Pad sequences with zeros to match length
+x_pad = [x zeros(1, N-Lx)];
+h_pad = [h zeros(1, N-Lh)];
+
+% Construct the circular convolution matrix
+conv_matrix = zeros(N, N);
+for i = 1:N
+    conv_matrix(:, i) = circshift(x_pad, i-1)';
+end
+
+
+Y = conv_matrix * h_pad';
+
+% Display result
+disp('Linear Convolution Result:');
+disp(Y);
+
+
+////////////////////////////////////DFT
+clc;
+clear all;
+close all;
+% x =input('Enter Input');
+x=[ 1 1 1 0]
+N=length(x);
+subplot(3,2,1);
+stem(x);
+title('Input value');
+y=zeros(1,N);
+
+for k=0:N-1
+    for n=0:N-1
+        y(k+1)=y(k+1)+x(n+1)*exp((-j*2*pi*k*n)/N);
+    end
+
+end
+disp(y);
+subplot(3,2,2);
+stem(y);
+%magnitude
+m=abs(y);
+%phase
+z=phase(y);
+disp(z);
+disp(m);
+
+
+//IDFT VALue
+
+clc;
+clear all;
+close all;
+% y =input('Enter Input');
+y=[ 3 -i 1 i]
+N=length(y);
+
+x=zeros(1,N);
+
+for n=0:N-1
+    for k=0:N-1
+        x(n+1)=x(n+1)+(1/N)*( y(k+1)*exp((j*2*pi*k*n)/N) );
+    end
+
+end
+disp(x);
+
+////////////overlap add method
+clc;
+clear all;
+close all;
+
+%x=input('enter the array:');
+x=[1 2 3 3 2 1 -1 -2 -3 5 6 -1 2 0 2 1];
+h=[3 2 1 1];
+lx=length(x);
+%h=input('enter the array');
+M=length(h);
+%N=input('enter the block size:');
+N=7;
+L=N-M+1;
+h=[h,zeros(1,L-1)];
+xx=reshape(x,[L,lx/L]);
+
+xx
+c=zeros(1,lx+M-1);
+for i=1:(lx)/L
+    arr=xx(:,i);
+   % arr
+    arr=arr';
+   % arr
+    arr=[arr,zeros(1,M-1)];
+    z=[];
+    for j=1:L+M-1
+        tmm=circshift(arr,[0,j-1]);
+        %tmm
+        tmm=tmm';
+        %tmm
+        z=[z,tmm];
+       % z
+    end
+    z
+    B=z*h';
+    B=B'
+    for k=1:N
+        c(1,(L*(i-1)+k))=c(1,(L*(i-1)+k))+B(1,k);
+        
+    end
+    
+end
+c
+/////////////////Peridicity
+clc;
+clear all;
+close all;
+% x =input('Enter Input');
+x=[ 1 1 1 0]
+N=length(x);
+
+y=zeros(1,N); 
+
+
+for k=0:N-1
+    for n=0:N-1
+        y(k+1)=y(k+1)+x(n+1)*exp((-j*2*pi*k*n)/N);
+    end
+
+end
+disp(y);
+
+y2=zeros(1,N);
+
+for k=0:N-1
+    for n=0:N-1
+        y2(k+1)=y2(k+1)+x(n+1)*exp((-j*2*pi*(k+N)*n)/N);
+    end
+
+end
+disp(y2);
+
+
+
+/////////////Linaearity
+clc;
+x1 = [0 0 0 1];
+x2 = [1 1 0 1];
+a1 = 1;
+a2 = 2;
+x = a1*x1 + a2*x2;
+N = length(x);
+X = zeros(1,N);
+for k = 0:N-1
+    for n = 0:N-1
+        X(k+1) = X(k+1) + x(n+1)*exp(-1i*2*pi*k*n/N);
+    end
+end
+disp(X);
+N1 = length(x1);
+X1 = zeros(1,N1);
+for k = 0:N1-1
+    for n = 0:N1-1
+        X1(k+1) = X1(k+1) + x1(n+1)*exp(-1i*2*pi*k*n/N1);
+    end
+end
+N2 = length(x2);
+X2 = zeros(1,N2);
+for k = 0:N2-1
+    for n = 0:N2-1
+        X2(k+1) = X2(k+1) + x2(n+1)*exp(-1i*2*pi*k*n/N2);
+    end
+end
+r = a1*X1 + a2*X2;
+disp(r);
+subplot(1,2,1);
+stem(X);
+axis([0 N -10 10]);
+title('DFT[a1x1(n)+a2x2(n)]');
+grid on;
+
+subplot(1,2,2);
+stem(r);
+axis([0 N -10 10]);
+title('a1X1(k)+a2X2(k)');
+grid on;
+
+
+//////////MAtrix multiplication
+a=[3 3; 6 2];
+b=[4 7;3 2];
+[rowa, cola] = size(a);
+[rowb, colb] = size(b);
+
+C = zeros(rowa, colb);
+
+% Perform matrix multiplication manually
+for i = 1:rowa
+    for j = 1:colb
+        % Compute the dot product of row i of A and column j of B
+        for k = 1:cola
+            C(i,j) = C(i,j) + a(i,k) * b(k,j);
+        end
+    end
+end
+
+% Display the result
+disp('Result of matrix multiplication:');
+disp(C);
+
+
+
+///////////Analog Signal
+t_analog = 0:0.01:5; 
+
+analog_signal = sin(2*pi*t_analog); % Sinusoidal signal with frequency 1 Hz
+
+% Plot the analog signal
+figure;
+plot(t_analog, analog_signal);
+title('Analog Signal');
+xlabel('Time (s)');
+ylabel('Amplitude');
+
+
+
+
+
+///Digital Signal
+% Define the time vector for digital signal
+t_digital = 0:0.1:5; % Time from 0 to 5 seconds with a step of 0.1
+
+% Define the digital signal (e.g., a square wave)
+digital_signal = square(2*pi*1*t_digital); % Square wave with frequency 1 Hz
+
+% Plot the digital signal
+figure;
+stem(t_digital, digital_signal, 'b', 'LineWidth', 1);
+title('Digital Signal');
+xlabel('Time (s)');
+ylabel('Amplitude');
+grid on;
+
+

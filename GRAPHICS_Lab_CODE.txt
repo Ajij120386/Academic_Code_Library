@@ -1,0 +1,1095 @@
+
+//Implement DDA Line Drawing Algorithm
+
+
+
+
+
+#include <graphics.h>
+#include <bits/stdc++.h>
+using namespace std;
+
+
+int  main( )
+{
+
+ int  xn,yn,x1,y1,x2,y2,dx,dy,step;
+
+  int i,gd=DETECT,gm;
+
+	initgraph(&gd, &gm, "");
+
+ /*
+
+
+cout<<"Enter the value of x1 and y1 : ";
+
+cin>>x1>>y1;
+
+  cout<<"Enter the value of x2 and y2: ";
+    cin>>x2>>y2;
+
+
+ */
+x1=12,y1=20,x2=100,y2=80;
+dx=abs(x2-x1);
+dy=abs(y2-y1);
+
+if(dx>=dy)
+step=dx;
+else
+step=dy;
+
+xn=dx/step;
+yn=dy/step;
+
+
+
+     for(int i=1;i<=step;i++)
+    {
+          putpixel(x1,y1,LIGHTBLUE);
+           x1=x1+xn;
+           y1 =y1+yn;
+
+          delay(100);
+       }
+    getch();
+closegraph();
+}
+
+
+
+
+
+
+
+///////Implement Bresenham's Line Drawing Algorithm
+
+#include<bits/stdc++.h>
+#include<graphics.h>
+using namespace std;
+void drawline(int x0, int y0, int x1, int y1)
+{
+    int dx, dy, p, x, y;
+
+	dx=x1-x0;
+	dy=y1-y0;
+
+	x=x0;
+	y=y0;
+
+	p=2*dy-dx;
+
+	while(x<x1)
+	{
+		if(p>=0)
+		{
+			putpixel(x,y,4);
+			y=y+1;
+			p=p+2*dy-2*dx;
+		}
+		else
+		{
+			putpixel(x,y,4);
+			p=p+2*dy;
+		}
+		x=x+1;
+		delay(100);
+	}
+}
+
+int main()
+{
+	int gdriver=DETECT, gmode, error, x0, y0, x1, y1;
+	initgraph(&gdriver, &gmode, "");
+
+	/* cout<<"Enter co-ordinates of first point: ";
+	cin>>x0>>y0;
+
+	cout<<"Enter co-ordinates of second point: ";
+	cin>>x1>>y1;
+	*/
+   x0=20,y0=20,x1=200,y1=200;
+	drawline(x0, y0, x1, y1);
+
+	getch();
+
+	return 0;
+}
+
+
+
+
+
+
+
+///////Implement Bresenham's Cycle Drawing Algorithm
+
+#include <graphics.h>
+#include <bits/stdc++.h>
+using namespace std;
+
+
+
+void Bres_circle(double x1, double y1, double r)
+{
+	double x = 0, y = r;
+
+	double p = 3  -  (2 * r);
+
+	while(x <= y)
+	{
+		putpixel(x1 + x, y1 + y, WHITE);
+		putpixel(x1 - x, y1 + y, WHITE);
+		putpixel(x1 + x, y1 - y, WHITE);
+		putpixel(x1 - x, y1 - y, WHITE);
+		putpixel(x1 + y, y1 + x, WHITE);
+		putpixel(x1 + y, y1 - x, WHITE);
+		putpixel(x1 - y, y1 + x, WHITE);
+		putpixel(x1 - y, y1 - x, WHITE);
+
+		x=x + 1;
+		if(p<0)
+			p=p + 4*(x) + 6;
+		else
+		{
+			p=p + 4*(x - y) + 10;
+			y=y - 1;
+ 		}
+
+		delay(100);
+ 	}
+}
+int main()
+{
+	double x1, y1, r;
+
+	int gd = DETECT, gm;
+	initgraph(&gd, &gm, "");
+  x1=140,y1=140,r=70;
+
+ /*
+ printf("Enter the starting co - ordinates of a center (x, y): ");
+	scanf("%lf %lf", &x1, &y1);
+	printf("Enter the value of radius: ");
+	scanf("%lf", &r);
+ */
+
+
+	Bres_circle(x1, y1, r);
+	getch();
+	closegraph();
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+//////////Implement Boundary Fill Algorithm
+
+
+#include <graphics.h>
+
+
+void boundaryFill4(int x, int y, int fill_color,int boundary_color)
+{
+	if(getpixel(x, y) != boundary_color &&
+	getpixel(x, y) != fill_color)
+	{
+    delay(10);
+		putpixel(x, y, fill_color);
+		boundaryFill4(x + 1, y, fill_color, boundary_color);
+		boundaryFill4(x, y + 1, fill_color, boundary_color);
+		boundaryFill4(x - 1, y, fill_color, boundary_color);
+		boundaryFill4(x, y - 1, fill_color, boundary_color);
+	}
+}
+
+//driver code
+int main()
+{
+
+	int gd = DETECT, gm;
+
+
+	initgraph(&gd, &gm, "");
+
+	int x = 250, y = 200, radius = 50;
+
+	// circle function
+	circle(x, y, radius);
+
+	// Function calling
+	boundaryFill4(x, y, 6, 15);
+
+	//delay(10000);
+
+	getch();
+
+	closegraph();
+
+	return 0;
+}
+
+
+
+
+
+
+
+
+/////////////Implement Flood Fill Algorithm
+
+#include <graphics.h>
+#include <bits/stdc++.h>
+using namespace std;
+
+
+
+void flood(int x,int y, int fill_col, int old_col)
+{
+
+if(getpixel(x,y)==old_col)
+{
+delay(10);
+putpixel(x,y,fill_col);
+flood(x+1,y,fill_col,old_col);
+flood(x-1,y,fill_col,old_col);
+flood(x,y+1,fill_col,old_col);
+flood(x,y-1,fill_col,old_col);
+}
+}
+int main()
+{
+int gd,gm=DETECT;
+detectgraph(&gd,&gm);
+initgraph(&gd,&gm,"C:\\TurboC3\\BGI");
+rectangle(50,50,100,100);
+flood(51,51,9,0);
+getch();
+}
+
+
+
+
+
+///////////////Implement Cohen Shutterland Algorithm
+// C++ program to implement Cohen Sutherland algorithm for line clipping.
+#include <iostream>
+#include<stdio.h>
+#include<graphics.h>
+
+using namespace std;
+
+// Defining region codes
+
+const int LEFT = 1;   // 0001
+const int RIGHT = 2;  // 0010
+const int BOTTOM = 4; // 0100
+const int TOP = 8;    // 1000
+
+// Defining x_max, y_max and x_min, y_min for clipping rectangle. Since diagonal points are enough to define a rectangle
+const int x_max = 500;
+const int y_max = 500;
+const int x_min = 200;
+const int y_min = 200;
+
+
+
+// Function to compute region code for a point(x, y)
+int computeCode(double x, double y)
+{
+    // initialized as being inside
+    int code = 0;
+
+    if (x < x_min)       // to the left of rectangle
+        code |= LEFT;
+    else if (x > x_max)  // to the right of rectangle
+        code |= RIGHT;
+    if (y < y_min)       // below the rectangle
+        code |= BOTTOM;
+    else if (y > y_max)  // above the rectangle
+        code |= TOP;
+
+    return code;
+}
+
+
+
+// Implementing Cohen-Sutherland algorithm
+// Clipping a line from P1 = (x2, y2) to P2 = (x2, y2)
+
+void cohenSutherlandClip(double x1, double y1,
+                         double x2, double y2)
+{
+    // Compute region codes for P1, P2
+    int code1 = computeCode(x1, y1);
+    //printf("%d\n", code1);
+    int code2 = computeCode(x2, y2);
+    //printf("%d\n", code2);
+
+    // Initialize line as outside the rectangular window
+    bool accept = false;
+
+    while (true)
+    {
+        if ((code1 == 0) && (code2 == 0))
+        {
+            // If both endpoints lie within rectangle
+            accept = true;
+            break;
+        }
+        else if (code1 & code2)
+        {
+            // If both endpoints are outside rectangle, in same region
+            break;
+        }
+        else
+        {
+            // Some segment of line lies within the rectangle
+            int code_out;
+            double x, y;
+
+            // At least one endpoint is outside the rectangle, pick it.
+            if (code1 != 0)
+                code_out = code1;
+            else
+                code_out = code2;
+
+            // Find intersection point; using formulas y = y1 + slope * (x - x1),
+            // x = x1 + (1 / slope) * (y - y1)
+            if (code_out & TOP)
+            {
+                // point is above the clip rectangle
+                x = x1 + (x2 - x1) * (y_max - y1) / (y2 - y1);
+                y = y_max;
+            }
+            else if (code_out & BOTTOM)
+            {
+                // point is below the rectangle
+                x = x1 + (x2 - x1) * (y_min - y1) / (y2 - y1);
+                y = y_min;
+            }
+            else if (code_out & RIGHT)
+            {
+                // point is to the right of rectangle
+                y = y1 + (y2 - y1) * (x_max - x1) / (x2 - x1);
+                x = x_max;
+            }
+            else if (code_out & LEFT)
+            {
+                // point is to the left of rectangle
+                y = y1 + (y2 - y1) * (x_min - x1) / (x2 - x1);
+                x = x_min;
+            }
+
+            // Now intersection point x,y is found We replace point outside rectangle by intersection point
+            if (code_out == code1)
+            {
+                x1 = x;
+                y1 = y;
+                code1 = computeCode(x1, y1);
+            }
+            else
+            {
+                x2 = x;
+                y2 = y;
+                code2 = computeCode(x2, y2);
+            }
+        }
+    }
+
+    if (accept)
+    {
+        cout <<"Line accepted from " << x1 << ", "
+             << y1 << " to "<< x2 << ", " << y2 << endl;
+        // Here the user can add code to display the rectangle
+        // along with the accepted (portion of) lines
+
+
+        line(x1,y1,x2,y2);
+
+    }
+    else
+        cout << "Line rejected" << endl;
+}
+
+
+
+// Driver code
+int main()
+{
+    int gd = DETECT, gm;
+
+    // Initialize graphics function
+    initgraph (&gd, &gm, "");
+
+
+
+     rectangle(x_min,y_min,x_max,y_max);
+
+     int x1=150,y1=150,x2=350,y2=350;
+      line(x1,y1,x2,y2);
+
+    printf("Press 1 to clip!\n");
+    int ans;
+    scanf("%d", &ans);
+
+    cleardevice();
+
+
+  rectangle(x_min,y_min,x_max,y_max);
+
+    if(ans == 1)
+        cohenSutherlandClip(x1,y1,x2,y2);
+
+    getch();
+    return 0;
+}
+
+
+
+
+
+///Implementing A CArtooon
+#include <iostream>
+#include <graphics.h>
+#include <conio.h>
+
+int main() {
+    // Initialize graphics mode
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    // Draw the sky
+    setcolor(LIGHTBLUE);
+    rectangle(0, 0, getmaxx(), getmaxy());
+    floodfill(1, 1, LIGHTBLUE);
+
+    // Draw the sun
+    setcolor(YELLOW);
+    setfillstyle(SOLID_FILL, YELLOW);
+    circle(100, 100, 50);
+    floodfill(100, 100, YELLOW);
+
+    // Draw the grass
+    setcolor(GREEN);
+    rectangle(0, 300, getmaxx(), getmaxy());
+    floodfill(1, 301, GREEN);
+
+    // Draw a simple house
+    setcolor(BLUE);
+    rectangle(200, 200, 400, 350);
+    floodfill(201, 201, BLUE);
+    setcolor(BROWN);
+    rectangle(250, 250, 350, 350);
+    floodfill(251, 251, BROWN);
+
+    // Draw a tree
+    setcolor(BROWN);
+    rectangle(500, 200, 550, 350);
+    floodfill(501, 201, BROWN);
+    setcolor(GREEN);
+    setfillstyle(SOLID_FILL, GREEN);
+    circle(525, 150, 50);
+    floodfill(526, 151, GREEN);
+
+    // Draw a smiling face
+    setcolor(YELLOW);
+    setfillstyle(SOLID_FILL, YELLOW);
+    circle(300, 250, 50);
+    floodfill(301, 251, YELLOW);
+    setcolor(BLACK);
+    setfillstyle(SOLID_FILL, BLACK);
+    circle(280, 230, 5);
+    floodfill(281, 231, BLACK);
+    circle(320, 230, 5);
+    floodfill(321, 231, BLACK);
+    arc(300, 260, 220, 320, 20);
+
+    // Draw a cloud
+    setcolor(WHITE);
+    setfillstyle(SOLID_FILL, WHITE);
+    circle(500, 100, 30);
+    floodfill(501, 101, WHITE);
+    circle(530, 100, 30);
+    floodfill(531, 101, WHITE);
+    circle(515, 90, 30);
+    floodfill(516, 91, WHITE);
+    circle(515, 110, 30);
+    floodfill(516, 111, WHITE);
+
+    getch();
+    closegraph();
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+///Implementing  Animation
+
+#include <graphics.h>
+#include <bits/stdc++.h>
+using namespace std;
+
+
+int  main( )
+{
+  int gd=DETECT,gm;
+  initgraph(&gd,&gm, "");
+
+
+     //circle(170,170,70);
+
+   for(int i=0;i<=1000;i++){
+
+    circle(170+i,170,70);
+    delay(10);
+    cleardevice();
+   }
+
+   getch();
+   closegraph();
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+//To draw concentric Circle
+#include <graphics.h>
+#include <bits/stdc++.h>
+using namespace std;
+
+
+int  main( )
+{
+  int gd=DETECT,gm;
+  initgraph(&gd,&gm, "");
+
+
+ int x,y,rad;
+  x=getmaxx()/2;
+  y=getmaxy()/2;
+
+   for(int rad=20;rad<=120;rad+=10){
+
+      setcolor(rad/10);
+      circle(x,y,rad);
+
+
+   }
+
+
+
+
+   getch();
+   closegraph();
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+//Movement of An  object
+#include <graphics.h>
+#include <bits/stdc++.h>
+using namespace std;
+
+
+int  main( )
+{
+  int gd=DETECT,gm;
+  initgraph(&gd,&gm, "");
+
+
+   for(int i=0;i<=920;i+=10){
+
+
+
+    setcolor(RED);
+
+    rectangle(50+i,100,150+i,200);
+    rectangle(150+i,150,200+i,200);
+    circle(75+i,210,10);
+    circle(175+i,210,10);
+    delay(100);
+    cleardevice();
+
+   }
+
+   getch();
+   closegraph();
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+///2D Translation Rectangle about Origin
+
+#include<bits/stdc++.h>
+#include<graphics.h>
+
+using namespace std;
+
+
+int main(){
+
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+     //50 50 100 100
+      cout << "Enter coordinate of rectangle ";
+    int left,top,right,bottom;
+    cin>>left>>top>>right>>bottom;
+
+    setcolor(3);
+    rectangle(left, top, right, bottom);
+
+
+    cout << "Enter translation factors ";
+    int a, b;
+    cin >> a >> b;
+  setcolor(4);
+
+    rectangle(left + a , top + b, right + a, bottom + b);
+
+    getch();
+    closegraph();
+
+    return 0;
+}
+
+
+
+
+///2D Scaling Rectangle about Origin
+#include<bits/stdc++.h>
+#include<graphics.h>
+
+using namespace std;
+
+
+int main(){
+
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm,"");
+
+     //30 30 70 70
+      cout << "Enter coordinate of rectangle ";
+    int left,top,right,bottom;
+    cin>>left>>top>>right>>bottom;
+
+    setcolor(3);
+
+    rectangle(left, top, right, bottom);
+
+    cout << "Enter translation factors ";
+    int a, b;
+    cin >> a >> b;
+
+    setcolor(4);
+    rectangle(left * a , top * b, right *a, bottom * b);
+
+
+    getch();
+    closegraph();
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+///2D Rotation Rectangle about Origin
+#include<bits/stdc++.h>
+#include<graphics.h>
+
+using namespace std;
+#define PI acos(-1)
+
+int main()
+{
+    int gd=0,gm;
+    int x1=100,y1=50,x2=200,y2=50,x3=100,y3=100,x4=200,y4=100,shx=2;
+    double s,c, angle=20;
+    initgraph(&gd, &gm, "");
+
+
+    cleardevice();
+
+
+
+            line(x1,y1,x2,y2);
+             line(x1,y1,x3,y3);
+             line(x3,y3,x4,y4);
+             line(x2,y2,x4,y4);
+    //getch();
+
+
+    printf("Enter rotation angle: ");
+  //  scanf("%lf", &angle);
+
+    c = cos(angle * PI /180);
+    s = sin(angle * PI /180);
+
+    x1 = floor(x1 * c - y1 * s);
+    y1 = floor(x1 * s + y1 * c);
+
+    x2 = floor(x2 * c - y2 * s);
+    y2 = floor(x2 * s + y2 * c);
+
+    x3 = floor(x3 * c -y3 * s);
+    y3 = floor(x3 * s + y3 * c);
+
+
+    x4 = floor(x4 * c -y4 * s);
+    y4 = floor(x4 * s + y4 * c);
+
+   // printf("%d %d %d %d", x1, y1, x2, y2);
+
+      setcolor(4);
+
+     line(x1,y1,x2,y2);
+             line(x1,y1,x3,y3);
+             line(x3,y3,x4,y4);
+             line(x2,y2,x4,y4);
+
+    getch();
+    closegraph();
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///2D Rotation Trianglee about Origin
+
+#include<bits/stdc++.h>
+#include<graphics.h>
+
+using namespace std;
+#define PI acos(-1)
+
+int main()
+{
+    int gd=0,gm,x1=200,y1=300,x2=500,y2=300,x3=350,y3=400;
+    double s,c, angle=20;
+    initgraph(&gd, &gm, "");
+
+
+    cleardevice();
+
+    line(x1,y1,x2,y2);
+    line(x2,y2,x3,y3);
+    line(x3,y3,x1,y1);
+    //getch();
+
+
+    printf("Enter rotation angle: ");
+  //  scanf("%lf", &angle);
+
+    c = cos(angle * PI /180);
+    s = sin(angle * PI /180);
+
+    x1 = floor(x1 * c - y1 * s);
+    y1 = floor(x1 * s + y1 * c);
+
+    x2 = floor(x2 * c - y2 * s);
+    y2 = floor(x2 * s + y2 * c);
+
+    x3 = floor(x3 * c -y3 * s);
+    y3 = floor(x3 * s + y3 * c);
+
+   // printf("%d %d %d %d", x1, y1, x2, y2);
+
+      setcolor(4);
+
+    line(x1, y1, x2, y2);
+
+    line(x2, y2, x3, y3);
+
+    line(x3, y3, x1, y1);
+
+    getch();
+    closegraph();
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+///2D Sharing Rectangle about Origin
+
+#include<bits/stdc++.h>
+#include<graphics.h>
+
+using namespace std;
+
+
+int main(){
+
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    int x1=100,y1=50,x2=200,y2=50,x3=100,y3=100,x4=200,y4=100,shx=2;
+             cout<<"Before shearing of rectangle"<<endl;
+             setcolor(3);
+             line(x1,y1,x2,y2);
+             line(x1,y1,x3,y3);
+             line(x3,y3,x4,y4);
+             line(x2,y2,x4,y4);
+             cout<<"After shearing of rectangle"<<endl;
+             x1=x1+shx*y1;
+             x2=x2+shx*y2;
+             x3=x3+shx*y3;
+             x4=x4+shx*y4;
+             setcolor(13);
+             line(x1,y1,x2,y2);
+             line(x1,y1,x3,y3);
+             line(x3,y3,x4,y4);
+             line(x2,y2,x4,y4);
+
+          getch();
+    closegraph();
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+///2D Reflection Triangle about Origin
+
+#include<bits/stdc++.h>
+#include<graphics.h>
+
+using namespace std;
+
+
+int main(){
+
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+              int x1=200,y1=300,x2=500,y2=300,x3=350,y3=400;
+                 cout<<"triangle before reflection"<<endl;
+
+                 setcolor(3);
+                 line(x1,y1,x2,y2);
+
+                 line(x2,y2,x3,y3);
+                 line(x3,y3,x1,y1);
+
+                  cout<<"triangle after reflection"<<endl;
+
+
+                 setcolor(4);
+                 line(x1,-y1+500,x2,-y2+500);
+
+                 line(x2,-y2+500,x3,-y3+500);
+                   line(x3,-y3+500,x1,-y1+500);
+                 getch();
+
+
+                closegraph();
+
+    return 0;
+}
+
+
+
+//To implement Imoji Image
+
+#include <graphics.h>
+#include <bits/stdc++.h>
+using namespace std;
+
+
+int  main( )
+{
+
+
+  int i,gd=DETECT,gm;
+
+	initgraph(&gd, &gm, "");
+  //initwindow(300,100);
+
+  setcolor(YELLOW);
+
+  // yellow circle for imoji
+  setfillstyle(SOLID_FILL,YELLOW);
+  circle(150,150,80);
+  floodfill(150,150,YELLOW);
+
+
+ //rectangle for smile
+  setcolor(WHITE);;
+  setfillstyle(SOLID_FILL,WHITE);
+  rectangle(100,180,190,190);
+  floodfill(101,181,WHITE);
+
+
+   //creating white cycle for both eyes
+
+   setfillstyle(SOLID_FILL,WHITE);
+  circle(110,130,15);
+  floodfill(110,130,WHITE);
+
+  setfillstyle(SOLID_FILL,WHITE);
+  circle(180,130,15);
+  floodfill(180,130,WHITE);
+
+
+
+    getch();
+closegraph();
+}
+
+
+
+
+
+
+
+//Draaw ARC
+#include <graphics.h>
+#include <bits/stdc++.h>
+using namespace std;
+
+
+int  main( )
+{
+  int gd=DETECT,gm;
+  initgraph(&gd,&gm, "");
+
+
+
+
+  arc(300,300,0,270,120);
+
+
+
+   getch();
+   closegraph();
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Draw BAR 2D && 3D
+#include <graphics.h>
+#include <bits/stdc++.h>
+using namespace std;
+
+
+int  main( )
+{
+  int gd=DETECT,gm;
+  initgraph(&gd,&gm, "");
+
+
+
+//2d bar
+  //bar(100,100,200,200);
+  //3d bar
+  bar3d(100,100,200,200,20,1);
+
+
+
+   getch();
+   closegraph();
+
+
+
+}
+
+
+
